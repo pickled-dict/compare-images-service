@@ -1,16 +1,14 @@
 import os
+import sys
 import json
 import time
 
 DOCKER_RUN_CMD = """docker run -p 3000:3000 --name <REPLACE ME> \\
--e DATABASE_URL=<REPLACE ME> \\
+-e DATABASE_URL="<REPLACE ME>" \\
 -e NEXTAUTH_URL="<REPLACE ME>" \\
 -e GITHUB_CLIENT_SECRET="<REPLACE ME>" \\
 -e NEXTAUTH_SECRET="<REPLACE ME>" \\
 -d <REPLACE ME>"""
-
-def log_it(s: str):
-    print(f"{time.ctime()}: {s}")
 
 while True:
     old = json.loads(os.popen('docker image inspect <REPLACE ME>').read())[0]['Id']
@@ -19,9 +17,10 @@ while True:
 
     equal = old == new
 
-    log_it(old)
-    log_it(new)
-    log_it(f"are they equal?: {equal}")
+    print(old)
+    print(new)
+    print(f"are they equal?: {equal}")
+    sys.stdout.flush()
 
     if not equal:
         os.system('docker container stop <REPLACE ME>')
